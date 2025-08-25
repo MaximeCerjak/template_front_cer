@@ -1,0 +1,19 @@
+services:
+  app:
+    container_name: react-vite-prod-[CONTAINER_NAME]
+    image: [IMAGE_REACT_VITE]
+    build:
+      context: .
+    ports:
+      # TODO remplacer le port par le définitif
+      - 8080:80
+    networks:
+            - nw.nom_appli
+  
+networks:
+    nw.nom_appli:
+        ipam:
+          driver: default
+          config:
+            # TODO remplacer l'adresse de sous réseau
+            - subnet: "172.XX.0.0/24"

@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+@font-face {
+	font-family: 'Nexa';
+	src: url('./assets/fonts/nexa_light-webfont.woff2') format('woff2'),
+		 url('./assets/fonts/nexa_light-webfont.woff') format('woff');
+	font-weight: 300; /* Nexa Light */
+	font-style: normal;
+}
+  
+@font-face {
+	font-family: 'Nexa';
+	src: url('./assets/fonts/nexa_bold-webfont.woff2') format('woff2'),
+		 url('./assets/fonts/nexa_bold-webfont.woff') format('woff');
+	font-weight: 700; /* Nexa Bold */
+	font-style: normal;
+}
+
+$yellowCer: rgb(248, 179, 50);
+$redCer: rgb(232, 80, 31);
+$blueCer: rgb(24, 160, 150);
+$greyCer: rgb(75, 75, 77);
+$yellow: rgb(255, 255, 0);
+
+@layer components {
+	.primaryBtn-cerfrance {
+		@apply py-2 px-4 ml-2 text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-900 focus:border-teal-900;
+		background-color: $blueCer;
+		font-size: 1rem;
+	}
+	.dangerBtn-cerfrance {
+		@apply py-2 px-4 ml-2 text-white font-semibold rounded-lg shadow-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-900;
+		background-color: $redCer;
+		font-size: 1rem;
+	}
+	.warningBtn-cerfrance {
+		@apply py-2 px-4 ml-2 text-white font-semibold rounded-lg shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-900;
+		background-color: $yellowCer;
+		font-size: 1rem;
+	}
+}
+
+:root {
+	font-family: 'Nexa', sans-serif;
+	font-size: 13px;
+	color-scheme: light dark;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
+	--tooltipX: 0;
+	--tooltipY: 0;
+	@apply bg-gray-100;
+}
+
+.App {
+	text-align: left;
+	color: #f3f4f6;
+}
+
+#root {
+	margin: 0 auto;
+	text-align: center;
+	height: 100vh;
+	@apply w-full;
+	@apply absolute;
+}
+
+.burgerIcon {
+	cursor: pointer;
+}
+
+a {
+	font-weight: 500;
+	color: $blueCer;
+	text-decoration: inherit;
+}
+
+a:hover {
+	color: rgb(16, 109, 103);
+}
+
+body {
+	margin: 0;
+	display: flex;
+	min-width: 320px;
+	min-height: 100vh;
+	background-color: #f3f4f6;
+}
+
+input {
+	font-weight: 400 !important;
+}
+
+// #### COLORS #### //
+
+.text-gris-cer {
+	color: $greyCer;
+}
+
+.yellowCer {
+	background-color: $yellowCer;
+}
+
+.redCer {
+	background-color: $redCer;
+}
+
+.blueCer {
+	background-color: $blueCer;
+	color: white;
+}
+
+.greyCer {
+	background-color: $greyCer;
+}
+
+.greyCer-text {
+	color: $greyCer;
+}

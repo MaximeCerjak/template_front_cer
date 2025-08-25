@@ -1,0 +1,64 @@
+.primeReactComponent {
+    &:global {
+        @import 'primereact/resources/themes/saga-blue/theme.css';
+        @import 'primereact/resources/primereact.min.css';
+        @import 'primeicons/primeicons.css';
+        @import 'primeflex/primeflex.css'; 
+    }
+}
+
+/* Styles pour le DataTable */
+.dataTable {
+    @apply shadow rounded-lg overflow-hidden;
+}
+  
+.table {
+    @apply min-w-full divide-y divide-gray-200;
+}
+
+.header {
+    @apply bg-cer-blue-pastel px-4 py-2 border-0 text-left font-bold;
+}
+
+.row {
+    @apply hover:bg-gray-50;
+}
+
+.headerCell {
+    @apply px-4 py-2 bg-cer-blue-pastel text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+}
+
+.bodyCell {
+    @apply px-4 py-2 whitespace-nowrap text-sm text-gray-700;
+}
+
+.filterInput {
+    @apply mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm;
+}
+
+.paginator {
+    @apply bg-white px-4 py-2 flex items-center justify-between;
+}
+
+.paginatorPageButton {
+    @apply text-gray-500 hover:text-gray-700;
+}
+
+.paginatorCurrent {
+    @apply font-semibold;
+}
+
+.paginatorRowsPerPageDropdown {
+    @apply ml-2;
+}
+
+// hover on table row
+tbody > tr:hover {
+    background-color: #DCEBEC;
+}
+
+// Apply Montserrat font to the table
+.dataTable {
+    font-family: 'Nexa', sans-serif;
+}
+

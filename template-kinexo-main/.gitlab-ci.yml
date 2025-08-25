@@ -1,0 +1,138 @@
+image: docker:20.10.16
+
+variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+
+services:
+    - docker:20.10.16-dind
+
+default:
+    interruptible: true
+
+before_script:
+    - cd app
+
+
+
+stages:
+  - Build
+  - Deployment
+
+image_react_recette:
+    stage: Build
+    image: docker:20.10.16
+    environment:
+        name: recette
+    before_script:
+        - echo "${REGISTRY_USER_PASSWORD}" | docker login ${REGISTRY_URL} --username ${REGISTRY_USER_LOGIN} --password-stdin
+    variables:
+        TAG_PACKAGE_REACT: "${REGISTRY_URL}/${CI_PROJECT_TITLE}/cerfrance_react:${CI_COMMIT_SHORT_SHA}"
+    script:
+        # Initialisation du .env de recette
+        - cp .env.recette .env
+        # Remplacement des variables du .env
+        - sed -i -e "s/\[API_URL\]/${RECETTE_API_URL}/g" .env
+        - sed -i -e "s/\[VITE_ENV\]/${VITE_ENV}/g" .env
+        - sed -i -e "s/\[SENTRY_AUTH_TOKEN\]/${SENTRY_AUTH_TOKEN}/g" .env
+        - docker build -t ${TAG_PACKAGE_REACT} .
+        - docker push ${TAG_PACKAGE_REACT}
+
+    allow_failure: false
+    only:
+        - develop
+
+# image_react_prod:
+#     stage: Build
+#     image: docker:20.10.16
+#     environment:
+#         name: production
+#     before_script:
+#         - echo "${REGISTRY_USER_PASSWORD}" | docker login ${REGISTRY_URL} --username ${REGISTRY_USER_LOGIN} --password-stdin
+#     variables:
+#         TAG_PACKAGE_REACT: "${REGISTRY_URL}/${CI_PROJECT_TITLE}/cerfrance_react:${CI_COMMIT_SHORT_SHA}"
+#     script:
+#         # Initialisation du .env de recette
+#         - cp .env.recette .env
+#         # Remplacement des variables du .env
+#         - sed -i -e "s/\[API_URL\]/${PROD_API_URL}/g" .env
+#         - sed -i -e "s/\[VITE_ENV\]/${VITE_ENV}/g" .env
+#         - sed -i -e "s/\[SENTRY_AUTH_TOKEN\]/${SENTRY_AUTH_TOKEN}/g" .env
+#         - docker build -t ${TAG_PACKAGE_REACT} .
+#         - docker push ${TAG_PACKAGE_REACT}
+#     allow_failure: false
+#     only:
+#         - main
+
+recette:
+   stage: Deployment
+   image: docker:20.10.16
+   variables:
+       PROJECT_RELEASE_ROOT_DIR: "/home/webnet/${CI_PROJECT_TITLE}"
+       PROJECT_ARCHIVE_DIR: "/home/webnet/${CI_PROJECT_TITLE}/archive"
+   before_script:
+       - echo "${REGISTRY_USER_PASSWORD}" | docker login ${REGISTRY_URL} --username ${REGISTRY_USER_LOGIN} --password-stdin
+       # Setup SSH deploy keys
+       - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+       - eval $(ssh-agent -s)
+       - ssh-add <(echo "$SSH_PRIVATE_KEY")
+       - mkdir -p ~/.ssh
+       - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+   script:
+       # Initialisation du fichier docker-composer-prod.yml
+       - cp docker-compose-prod.yml.dist docker-compose-prod.yml
+       # Remplacement des variables contenant les liens vers les images
+       - sed -i -e "s/\[IMAGE_REACT_VITE\]/${REGISTRY_URL}\/${CI_PROJECT_TITLE}\/cerfrance_react:${CI_COMMIT_SHORT_SHA}/g" docker-compose-prod.yml
+       - sed -i -e "s/\[CONTAINER_NAME\]/${CI_PROJECT_TITLE}/g" docker-compose-prod.yml
+       # Suppression du fichier docker-compose sur le serveur de recette
+       - ssh webnet@192.168.220.37 "rm -f ${PROJECT_RELEASE_ROOT_DIR}/docker-compose.yml && exit"
+       # Copie du fichier docker-compose-prod.yml fraichement créé au sein du serveur de recette
+       - scp ${CI_PROJECT_DIR}/docker-compose-prod.yml webnet@192.168.220.37:${PROJECT_RELEASE_ROOT_DIR}/docker-compose.yml
+       # Copie du dockercompose avec incrément de la date
+       - scp ${CI_PROJECT_DIR}/docker-compose-prod.yml webnet@192.168.220.37:${PROJECT_ARCHIVE_DIR}/docker-compose-${CI_JOB_STARTED_AT}.yml
+       # Récupération des nouvelles images
+       - echo "${RECETTE_WEBNET_PASSWORD}" | ssh webnet@192.168.220.37 "cd ${PROJECT_RELEASE_ROOT_DIR} && docker compose pull && exit"
+       # Mise à jour du site
+       - echo "${RECETTE_WEBNET_PASSWORD}" | ssh webnet@192.168.220.37 "cd ${PROJECT_RELEASE_ROOT_DIR} && docker compose down -v && exit"
+       - echo "${RECETTE_WEBNET_PASSWORD}" | ssh webnet@192.168.220.37 "cd ${PROJECT_RELEASE_ROOT_DIR} && docker compose up -d && docker image prune -a -f && exit"
+   allow_failure: false
+   dependencies:
+       - image_react_recette
+   only:
+       - develop
+
+# prod:
+#    stage: Deployment
+#    image: docker:20.10.16
+#    variables:
+#        PROJECT_RELEASE_ROOT_DIR: "/home/webnet/${CI_PROJECT_TITLE}"
+#        PROJECT_ARCHIVE_DIR: "/home/webnet/${CI_PROJECT_TITLE}/archive"
+#    before_script:
+#        - echo "${REGISTRY_USER_PASSWORD}" | docker login ${REGISTRY_URL} --username ${REGISTRY_USER_LOGIN} --password-stdin
+#        # Setup SSH deploy keys
+#        - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+#        - eval $(ssh-agent -s)
+#        - ssh-add <(echo "$SSH_PRIVATE_KEY")
+#        - mkdir -p ~/.ssh
+#        - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#    script:
+#        # Initialisation du fichier docker-composer-prod.yml
+#        - cp docker-compose-prod.yml.dist docker-compose-prod.yml
+#        # Remplacement des variables contenant les liens vers les images
+#        - sed -i -e "s/\[IMAGE_REACT_VITE\]/${REGISTRY_URL}\/${CI_PROJECT_TITLE}\/cerfrance_react:${CI_COMMIT_SHORT_SHA}/g" docker-compose-prod.yml
+#        - sed -i -e "s/\[CONTAINER_NAME\]/${CI_PROJECT_TITLE}/g" docker-compose-prod.yml
+#        # Suppression du fichier docker-compose sur le serveur de prod
+#        - ssh webnet@192.168.220.40 "rm -f ${PROJECT_RELEASE_ROOT_DIR}/docker-compose.yml && exit"
+#        # Copie du fichier docker-compose-prod.yml fraichement créé au sein du serveur de recette
+#        - scp ${CI_PROJECT_DIR}/docker-compose-prod.yml webnet@192.168.220.40:${PROJECT_RELEASE_ROOT_DIR}/docker-compose.yml
+#        # Copie du dockercompose avec incrément de la date
+#        - scp ${CI_PROJECT_DIR}/docker-compose-prod.yml webnet@192.168.220.40:${PROJECT_ARCHIVE_DIR}/docker-compose-${CI_JOB_STARTED_AT}.yml
+#        # Récupération des nouvelles images
+#        - echo "${RECETTE_WEBNET_PASSWORD}" | ssh webnet@192.168.220.40 "cd ${PROJECT_RELEASE_ROOT_DIR} && docker compose pull && exit"
+#        # Mise à jour du site
+#        - echo "${RECETTE_WEBNET_PASSWORD}" | ssh webnet@192.168.220.40 "cd ${PROJECT_RELEASE_ROOT_DIR} && docker compose down -v && exit"
+#        - echo "${RECETTE_WEBNET_PASSWORD}" | ssh webnet@192.168.220.40 "cd ${PROJECT_RELEASE_ROOT_DIR} && docker compose up -d && docker image prune -a -f && exit"
+#    allow_failure: false
+#    dependencies:
+#        - image_react_prod
+#    only:
+       - main
