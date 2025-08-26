@@ -1,0 +1,30 @@
+// src/components/Layout/Footer/Footer.scss
+.footer-cerfrance {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  z-index: 100;
+
+  .footer-content {
+    padding: 0.75rem 0;
+  }
+
+  .footer-link {
+    color: rgb(24, 160, 150);
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: rgb(248, 179, 50);
+    }
+  }
+}
+
+// Adjustement pour le contenu principal
+body {
+  padding-bottom: 60px; // Espace pour le footer fixe
+}

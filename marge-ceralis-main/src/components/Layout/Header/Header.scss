@@ -1,0 +1,178 @@
+// src/components/Layout/Header/Header.scss
+
+.header-cerfrance {
+  background: linear-gradient(135deg, rgb(24, 160, 150) 0%, rgb(16, 140, 130) 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  // Logo section
+  .logo-cerfrance {
+    .logo-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+
+      .logo-image {
+        height: 45px;
+        width: auto;
+        max-width: 140px;
+        object-fit: contain;
+      }
+    }
+  }
+
+  // Navigation principale avec couleurs
+  nav {
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      margin: 0 4px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      color: white;
+      border: 2px solid transparent;
+
+      .nav-icon {
+        margin-right: 8px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+      }
+
+      .nav-text {
+        transition: all 0.3s ease;
+      }
+
+      // Prix d'achat - Bleu
+      &.nav-link-blue {
+        background: rgb(22, 187, 176);
+        border-color: rgba(24, 160, 150, 0.4);
+
+        .nav-icon {
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        &:hover {
+          background: rgba(10, 224, 210, 0.35);
+          border-color: rgba(24, 160, 150, 0.7);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(24, 160, 150, 0.25);
+        }
+
+        &.active {
+          background: rgb(22, 187, 176);
+          border-color: white;
+          box-shadow: 0 4px 15px rgba(24, 160, 150, 0.3);
+          
+          .nav-icon {
+            color: white;
+            transform: scale(1.1);
+          }
+          
+          .nav-text {
+            font-weight: 600;
+          }
+        }
+      }
+
+      // Analyse affaires - Jaune
+      &.nav-link-yellow {
+        background: rgba(248, 179, 50, 0.75);
+        border-color: rgba(248, 179, 50, 0.4);
+
+        .nav-icon {
+          color: white;
+        }
+
+        &:hover {
+          background: rgba(248, 179, 50, 0.55);
+          border-color: rgba(248, 179, 50, 0.7);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(248, 179, 50, 0.25);
+        }
+
+        &.active {
+          background: rgba(248, 179, 50, 0.75);
+          border-color: white;
+          box-shadow: 0 4px 15px rgba(248, 179, 50, 0.3);
+          
+          .nav-icon {
+            color: white;
+            transform: scale(1.1);
+          }
+          
+          .nav-text {
+            font-weight: 600;
+          }
+        }
+      }
+
+      // Pilotage - Rouge
+      &.nav-link-red {
+        background: rgba(232, 80, 31, 0.75);
+        border-color: rgba(232, 80, 31, 0.4);
+
+        .nav-icon {
+          color: white;
+        }
+
+        &:hover {
+          background: rgba(232, 80, 31, 0.55);
+          border-color: rgba(232, 80, 31, 0.7);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(232, 80, 31, 0.25);
+        }
+
+        &.active {
+          background: rgba(232, 80, 31, 0.75);
+          border-color: white;
+          box-shadow: 0 4px 15px rgba(232, 80, 31, 0.3);
+          
+          .nav-icon {
+            color: white;
+            transform: scale(1.1);
+          }
+          
+          .nav-text {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+  // User info
+  .user-info {
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .header-cerfrance {
+    .logo-cerfrance {
+      .logo-container {
+        .logo-image {
+          height: 40px;
+          max-width: 120px;
+        }
+      }
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+  }
+}

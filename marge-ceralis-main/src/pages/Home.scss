@@ -1,0 +1,407 @@
+// src/pages/Home/Home.scss
+@import '../styles/variables.scss';
+
+.home-page {
+  
+  // Bandeau principal
+  .banner-container {
+    animation: slideInDown 0.8s ease-out;
+    
+    .banner-gradient {
+      background: linear-gradient(135deg, $cer-blue 0%, rgba(24, 160, 150, 0.9) 50%, rgb(16, 140, 130) 100%);
+      position: relative;
+      overflow: hidden;
+      
+      // Animation subtile de pulsation
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+        animation: shimmer 3s ease-in-out infinite;
+      }
+    }
+    
+    // Grille de fond style "feuille de calcul"
+    .banner-grid {
+      background-image: 
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 20px,
+          rgba(255,255,255,0.1) 20px,
+          rgba(255,255,255,0.1) 21px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 20px,
+          rgba(255,255,255,0.1) 20px,
+          rgba(255,255,255,0.1) 21px
+        );
+    }
+    
+    // Icônes flottantes
+    .banner-icons {
+      .banner-icon {
+        position: absolute;
+        color: white;
+        transition: all 0.3s ease;
+        animation: float 6s ease-in-out infinite;
+        
+        &.icon-top-left {
+          top: 16px;
+          left: 32px;
+          font-size: 3rem;
+          opacity: 0.2;
+          animation-delay: 0s;
+        }
+        
+        &.icon-top-right {
+          top: 32px;
+          right: 48px;
+          font-size: 2rem;
+          opacity: 0.2;
+          animation-delay: 1s;
+        }
+        
+        &.icon-bottom-left {
+          bottom: 24px;
+          left: 64px;
+          font-size: 4rem;
+          opacity: 0.2;
+          animation-delay: 2s;
+        }
+        
+        &.icon-bottom-right {
+          bottom: 32px;
+          right: 32px;
+          font-size: 3rem;
+          opacity: 0.2;
+          animation-delay: 3s;
+        }
+        
+        &.icon-center-left {
+          top: 50%;
+          left: 25%;
+          font-size: 2rem;
+          opacity: 0.15;
+          animation-delay: 4s;
+        }
+        
+        &.icon-center-right {
+          top: 33%;
+          right: 25%;
+          font-size: 3rem;
+          opacity: 0.15;
+          animation-delay: 5s;
+        }
+      }
+    }
+    
+    // Contenu central du bandeau
+    .banner-content {
+      z-index: 10;
+      
+      h2 {
+        font-family: 'Nexa', sans-serif;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        animation: fadeInUp 1s ease-out 0.5s both;
+      }
+      
+      p {
+        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        animation: fadeInUp 1s ease-out 0.7s both;
+      }
+      
+      .pi-chart-pie {
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        animation: pulse 2s ease-in-out infinite;
+      }
+    }
+  }
+  
+  // Titre principal
+  .main-title {
+    font-family: 'Nexa', sans-serif;
+    color: $cer-gray;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    animation: fadeInUp 1s ease-out 0.3s both;
+    line-height: 1.2;
+    
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+      line-height: 1.1;
+    }
+  }
+  
+  // Grille des modules
+  .modules-grid {
+    animation: fadeInUp 1s ease-out 0.9s both;
+    
+    .module-card {
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-8px);
+        
+        .module-header {
+          &.bg-cer-blue {
+            background: linear-gradient(135deg, $cer-blue 0%, $cer-blue-hover 100%);
+          }
+          
+          &.bg-cer-yellow {
+            background: linear-gradient(135deg, $cer-yellow 0%, $cer-yellow-hover 100%);
+          }
+          
+          &.bg-cer-red {
+            background: linear-gradient(135deg, $cer-red 0%, $cer-red-hover 100%);
+          }
+        }
+      }
+      
+      .module-header {
+        position: relative;
+        overflow: hidden;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          transition: left 0.5s;
+        }
+        
+        &:hover::after {
+          left: 100%;
+        }
+        
+        i {
+          margin-bottom: 1rem;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        h3 {
+          font-family: 'Nexa', sans-serif;
+          text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+      }
+      
+      .module-content {
+        p {
+          font-size: 0.95rem;
+          line-height: 1.6;
+        }
+      }
+    }
+  }
+}
+
+// Animations personnalisées
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-15px) rotate(0.5deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+// Responsive design
+@media (max-width: 1024px) {
+  .home-page {
+    .modules-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .banner-container {
+      .banner-gradient {
+        height: 200px;
+      }
+      
+      .banner-content {
+        .pi-chart-pie {
+          font-size: 4rem;
+        }
+        
+        h2 {
+          font-size: 1.5rem;
+        }
+        
+        p {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .home-page {
+    padding: 2rem 0;
+    
+    .modules-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    .banner-container {
+      margin-bottom: 2rem;
+      
+      .banner-gradient {
+        height: 180px;
+      }
+      
+      .banner-content {
+        padding: 1rem;
+        
+        .pi-chart-pie {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+        }
+        
+        h2 {
+          font-size: 1.25rem;
+          margin-bottom: 0.5rem;
+        }
+        
+        p {
+          font-size: 0.9rem;
+        }
+      }
+      
+      .banner-icons .banner-icon {
+        font-size: 1.5rem !important;
+        
+        &.icon-top-left {
+          top: 8px;
+          left: 16px;
+        }
+        
+        &.icon-top-right {
+          top: 16px;
+          right: 24px;
+        }
+        
+        &.icon-bottom-left {
+          bottom: 12px;
+          left: 32px;
+        }
+        
+        &.icon-bottom-right {
+          bottom: 16px;
+          right: 16px;
+        }
+        
+        &.icon-center-left,
+        &.icon-center-right {
+          display: none; 
+        }
+      }
+    }
+    
+    .main-title {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .home-page {
+    .banner-container {
+      .banner-gradient {
+        height: 160px;
+      }
+      
+      .banner-content {
+        .pi-chart-pie {
+          font-size: 2.5rem;
+        }
+        
+        h2 {
+          font-size: 1.1rem;
+        }
+        
+        p {
+          font-size: 0.85rem;
+        }
+      }
+    }
+    
+    .module-card {
+      .module-header {
+        padding: 1.5rem;
+        
+        i {
+          font-size: 3rem;
+        }
+        
+        h3 {
+          font-size: 1.1rem;
+          line-height: 1.3;
+        }
+      }
+      
+      .module-content {
+        padding: 1.5rem;
+        
+        p {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
